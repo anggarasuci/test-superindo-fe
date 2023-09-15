@@ -1,8 +1,0 @@
-export const DapilActionType = {
-    GET_DAPILS: "GET_DAPIL",
-    GET_DAPIL_BY_ID: "GET_DAPIL_BY_ID",
-    SUBMIT_DAPIL: "SUBMIT_DAPIL",
-    UPDATE_DAPIL: "UPDATE_DAPIL",
-    REMOVE_DAPIL: "REMOVE_DAPIL",
-  };
-  

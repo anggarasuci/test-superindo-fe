@@ -20,7 +20,6 @@ const createParams = (
     name: name,
     isActive: isActive,
   };
-  console.log(">>>>>>> ccc", result);
   return result;
 };
 

@@ -1,5 +1,0 @@
-export const UploadSurveysActionType = {
-  GET_UPLOAD_SURVEYS: "GET_UPLOAD_SURVEYS",
-  GET_UPLOAD_SURVEYS_BY_ID: "GET_UPLOAD_SURVEYS_BY_ID",
-};
-  

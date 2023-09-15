@@ -1,6 +1,5 @@
 import { appStoreImplementation } from "src/data/store-implementation/app-store-implementation";
 import imageToBase64 from "image-to-base64/browser";
-import { SettingActionType } from "src/data/action-type/setting-action-type";
 import Router from "next/router";
 
 const getIdFromApiUrl = (url: string) => {
@@ -37,29 +36,6 @@ const getPropertyName = (obj: Object, exp: any) => {
   return exp(res)();
 };
 
-const convertImageToBase64 = async (url: string) => {
-  appStoreImplementation.dispatch({
-    type: SettingActionType.SET_LOADING,
-    isLoading: true,
-  });
-  return await imageToBase64(url) // Image URL
-    .then((response: any) => {
-      appStoreImplementation.dispatch({
-        type: SettingActionType.SET_LOADING,
-        isLoading: false,
-      });
-      return response; // "iVBORw0KGgoAAAANSwCAIA..."
-    })
-    .catch((error) => {
-      appStoreImplementation.dispatch({
-        type: SettingActionType.SET_LOADING,
-        isLoading: false,
-      });
-      console.log(error); // Logs an error if there was one
-      return "";
-    });
-};
-
 const fileToBase64 = (file, callBack) => {
   let reader = new FileReader();
   reader.readAsDataURL(file);
@@ -80,7 +56,6 @@ export const Utils = {
   isLoggedIn,
   getAuthState,
   getPropertyName,
-  convertImageToBase64,
   mapGender,
   authorizePage,
   fileToBase64,

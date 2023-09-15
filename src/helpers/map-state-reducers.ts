@@ -1,5 +1,4 @@
 import { appStoreImplementation } from "src/data/store-implementation/app-store-implementation";
-import { DefaultValue } from "./constant/default-value";
 
 const updateStateList = (stateDataList: any[], newDataList: any[]) => {
   const result =
@@ -27,13 +26,6 @@ const setStateFromStateList = (stateDataList: [any], id: string) => {
   return result;
 };
 
-const clearState = (actionType: string) => {
-  appStoreImplementation.dispatch({
-    type: actionType,
-    payload: DefaultValue.EmptyResponse,
-  });
-};
-
 const setState = (actionType: string, payload: any) => {
   appStoreImplementation.dispatch({
     type: actionType,
@@ -46,6 +38,5 @@ export const MapStateReducers = {
   removeItemStateList,
   addItemStateList,
   setStateFromStateList,
-  clearState,
-  setState
+  setState,
 };

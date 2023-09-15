@@ -1,5 +1,4 @@
 import { BaseEntity } from "./base-entity";
-import { MenuEntity } from "./menu-entity";
 
 export interface AuthEntity {
   id: IdEntity;
@@ -14,8 +13,4 @@ export interface IdEntity {
   pid: number;
   increment: number;
   creationTime: string;
-}
-
-export interface GroupEntity extends BaseEntity {
-  menus: MenuEntity[];
 }

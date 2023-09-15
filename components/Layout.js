@@ -1,11 +1,6 @@
 import * as React from "react";
 import _ from "lodash";
-import {
-  styled,
-  createTheme,
-  ThemeProvider,
-  alpha,
-} from "@mui/material/styles";
+import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import getConfig from "next/config";
 import Head from "next/head";
 import Box from "@mui/material/Box";
@@ -31,21 +26,8 @@ import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useRouter } from "next/router";
-import { initStoreImplementation } from "src/data/store-implementation/init-store-implementation";
-import { settingStoreImplementation } from "src/data/store-implementation/setting-store-implementation";
-import { setGlobalPeriodIdUseCase } from "src/use-case/setting/set-global-period-id-use-case";
-import { setGlobalTypeIdUseCase } from "src/use-case/setting/set-global-type-id-use-case";
-import { CustomSelect } from "./CustomSelect";
 import { appStoreImplementation } from "src/data/store-implementation/app-store-implementation";
-import { Grid } from "@mui/material";
 import { CustomIcon } from "./CustomIcon";
-import InputBase from "@mui/material/InputBase";
-import { CustomSelectAutoComplete } from "components/CustomSelectAutoComplete";
-import { getGlobalDapilUseCase } from "src/use-case/setting/get-global-dapil-use-case";
-import { candidateStoreImplementation } from "src/data/store-implementation/candidate-store-implementation";
-import { getCandidateByPartyUseCase } from "src/use-case/candidate/get-candidate-by-party-use-case";
-import { FormControl, InputLabel, Select } from "@mui/material";
-import { GlobalFunction } from "helper/global-function";
 import { authStoreImplementation } from "src/data/store-implementation/auth-store-implementation";
 
 const drawerWidth = 240;
@@ -108,41 +90,6 @@ export default function Layout({ children }) {
   const [open, setOpen] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [openMenuStatus, setOpenMenuStatus] = React.useState([]);
-
-  const [autoCompleteDapils, setAutoCompleteDapils] = React.useState([]);
-  const [autoCompleteCandidates, setAutoCompleteCandidate] = React.useState([]);
-
-  const initStore = initStoreImplementation();
-  const settingStore = settingStoreImplementation();
-  const candidateStore = candidateStoreImplementation();
-  const authStore = authStoreImplementation();
-
-  const isCaleg =
-    authStore?.auth?.groups?.length === 1 &&
-    (authStore?.auth?.groups[0]?.id?.toString() === "3" ||
-      authStore?.auth?.groups[0]?.name === "Caleg");
-
-  const { setBacalegtHeader, setDefaultHeader } = GlobalFunction();
-
-  const handleOnClickMenu = (link) => {
-    if (
-      [
-        "/result/survey",
-        "/survey/result-survey-seat",
-        "/survey/uploads",
-        "/survey/pdf-survey",
-        "/score-type",
-        "/result/uploads-score",
-        "/result/score",
-        "/result/candidate-score",
-        "/dashboard",
-      ].includes(link)
-    ) {
-      setBacalegtHeader();
-    } else {
-      setDefaultHeader();
-    }
-  };
 
   const settings = [
     {
@@ -244,7 +191,7 @@ export default function Layout({ children }) {
     });
 
     setMenuItem(_.orderBy(generatedMenu, ["seq"], ["asc"]));
-  }, [initStore?.menus]);
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -282,94 +229,6 @@ export default function Layout({ children }) {
     handleCloseUserMenu();
   };
 
-  const setGlobalPeriod = React.useCallback(
-    async (id) => {
-      await setGlobalPeriodIdUseCase(settingStore, id);
-    },
-    [settingStore]
-  );
-
-  const setTypePeriod = React.useCallback(
-    (id) => {
-      setGlobalTypeIdUseCase(settingStore, id);
-    },
-    [settingStore]
-  );
-
-  const handleChangeToolbarPeriodField = (id) => {
-    setGlobalPeriod(id);
-  };
-
-  const handleChangeToolbarTypeField = (id) => {
-    setTypePeriod(id);
-  };
-
-  const getDapilByName = React.useCallback(
-    async (dapilName) => {
-      await getGlobalDapilUseCase(settingStore, dapilName);
-    },
-    [settingStore]
-  );
-
-  const getCandidateByName = React.useCallback(
-    async (candidateName) => {
-      await getCandidateByPartyUseCase(candidateStore, "", candidateName);
-    },
-    [candidateStore]
-  );
-
-  React.useEffect(() => {
-    mapCandidatesToAutocompleteFormat();
-  }, [candidateStore.candidates]);
-
-  const mapCandidatesToAutocompleteFormat = () => {
-    const temp = candidateStore.candidates?.map((item) => ({
-      id: item.id,
-      label: item.name,
-    }));
-    setAutoCompleteCandidate(temp);
-  };
-
-  React.useEffect(() => {
-    mapDapilsToAutocompleteFormat();
-  }, [settingStore.globalDapils]);
-
-  const mapDapilsToAutocompleteFormat = () => {
-    const temp = settingStore.globalDapils?.map((item) => ({
-      id: `${item.id}-${item.province?.id}`,
-      label: item.name,
-    }));
-    setAutoCompleteDapils(temp);
-  };
-
-  const handleChangeDapilField = (id) => {
-    const splitedId = id?.split("-");
-
-    if (splitedId?.length > 1) {
-      const url = `${window.location.origin
-        .toString()
-        .replace("home", "")}/result/dapil?province=${splitedId[1]}&dapil=${
-        splitedId[0]
-      }`;
-      window.open(url, "_self");
-    }
-  };
-
-  const handleChangeCandidateField = (id) => {
-    const url = `${window.location.origin
-      .toString()
-      .replace("home", "")}/result/candidate?id=${id}`;
-    window.open(url, "_self");
-  };
-
-  const handleOnSearchAutocompleteCandidate = (candidateName) => {
-    getCandidateByName(candidateName);
-  };
-
-  const handleOnSearchAutocompleteDapil = (dapilName) => {
-    getDapilByName(dapilName);
-  };
-
   React.useEffect(() => {
     let currentArray = openMenuStatus;
     for (let i = 0; i <= 100; i++) {
@@ -403,17 +262,15 @@ export default function Layout({ children }) {
           theme={darkTheme}
         >
           <Toolbar>
-            {!isCaleg && (
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{ mr: 2, ...(open && { display: "none" }) }}
-              >
-                <MenuIcon />
-              </IconButton>
-            )}
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: "none" }) }}
+            >
+              <MenuIcon />
+            </IconButton>
 
             <Typography
               variant="h6"
@@ -551,38 +408,6 @@ export default function Layout({ children }) {
                         <ExpandMore />
                       )}
                     </ListItemButton>
-                    <Collapse
-                      in={openMenuStatus[item.id]}
-                      timeout="auto"
-                      unmountOnExit
-                    >
-                      <List
-                        key={`child-list-${index}`}
-                        component="div"
-                        disablePadding
-                      >
-                        {item.childs.map((child, idChild) => {
-                          return (
-                            <ListItemButton
-                              sx={{ pl: 4 }}
-                              component="a"
-                              selected={child.link === currentUrl}
-                              href={child.link}
-                              key={`child-menu-button-${idChild}`}
-                              onClick={() => {
-                                handleOnClickMenu(child.link);
-                              }}
-                            >
-                              <CustomIcon name={child.icon} />
-                              <ListItemText
-                                key={`child-menu-text-${idChild}`}
-                                primary={child.text}
-                              />
-                            </ListItemButton>
-                          );
-                        })}
-                      </List>
-                    </Collapse>
                   </ThemeProvider>
                 );
               } else {

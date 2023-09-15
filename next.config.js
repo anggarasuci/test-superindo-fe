@@ -3,7 +3,7 @@ module.exports = {
   pageExtensions: ["mdx", "md", "jsx", "js", "tsx", "ts"],
   publicRuntimeConfig: {
     applicationName: "Test",
-    apiUrl: "https://localhost:7289", //https://private-730e6-anggarasucinugraha.apiary-mock.com/' //'https://api.partainasdem.id',
+    apiUrl: "https://localhost:7289",
     appLogo: "",
   },
   async redirects() {

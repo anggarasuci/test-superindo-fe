@@ -1,8 +1,6 @@
 import { AuthActionType } from "src/data/action-type/auth-action-type";
-import { SettingActionType } from "src/data/action-type/setting-action-type";
 import { appStoreImplementation } from "src/data/store-implementation/app-store-implementation";
 import { AuthRepository } from "src/domain/repository/auth-repository";
-import { DefaultValue } from "./constant/default-value";
 import { ResponseStatus } from "./constant/response-status";
 import { Utils } from "./utils";
 
@@ -15,18 +13,6 @@ const auth = async (url: string, body: any) => {
     body: JSON.stringify(body),
   };
   return fetch(url, requestOptions).then(handleResponse);
-};
-
-const refreshToken = async () => {
-  const response: any = await AuthRepository.refreshLogin(
-    appStoreImplementation.getState().auth?.auth?.refresh ?? ""
-  );
-  appStoreImplementation.dispatch({
-    type: AuthActionType.REFRESH_LOGIN,
-    payload: response,
-  });
-
-  return response;
 };
 
 const get = async (
@@ -45,10 +31,6 @@ const get = async (
   if (callDispatch)
     appStoreImplementation.dispatch({ type: actionType, payload: response });
   if (response != ResponseStatus.Unauthorized) return response;
-
-  const result = await refreshToken();
-  if (result?.status?.code == ResponseStatus.Success)
-    get(actionType, url, true);
 };
 
 const download = async (actionType: string, url: string, filename: string) => {
@@ -89,53 +71,7 @@ const post = async (
     if (callDispatch)
       appStoreImplementation.dispatch({ type: actionType, payload: response });
     if (response != ResponseStatus.Unauthorized) return response;
-
-    const result = await refreshToken();
-    if (result?.status?.code == ResponseStatus.Success)
-      post(actionType, url, body, true);
-  } catch (e) {
-    appStoreImplementation.dispatch({
-      type: SettingActionType.SET_LOADING,
-      isLoading: false,
-    });
-    appStoreImplementation.dispatch({
-      type: actionType,
-      payload: DefaultValue.EmptyResponse,
-    });
-  }
-};
-
-const postWithAttachFile = async (
-  actionType: string,
-  url: string,
-  formData: FormData,
-  callDispatch?: boolean
-) => {
-  const requestOptions = {
-    method: "POST",
-    headers: authHeader(true),
-    body: formData,
-  };
-  try {
-    const response = await fetch(url, requestOptions).then(handleResponse);
-
-    if (callDispatch)
-      appStoreImplementation.dispatch({ type: actionType, payload: response });
-    if (response != ResponseStatus.Unauthorized) return response;
-
-    const result = await refreshToken();
-    if (result?.status?.code == ResponseStatus.Success)
-      postWithAttachFile(actionType, url, formData, true);
-  } catch (e) {
-    appStoreImplementation.dispatch({
-      type: SettingActionType.SET_LOADING,
-      isLoading: false,
-    });
-    appStoreImplementation.dispatch({
-      type: actionType,
-      payload: DefaultValue.EmptyResponse,
-    });
-  }
+  } catch (e) {}
 };
 
 const put = async (
@@ -155,13 +91,6 @@ const put = async (
   if (callDispatch)
     appStoreImplementation.dispatch({ type: actionType, payload: response });
   if (response != ResponseStatus.Unauthorized) return response;
-
-  const result = await refreshToken();
-  if (
-    result?.status?.code == ResponseStatus.Success ||
-    result?.status?.code == ResponseStatus.SuccessNoContent
-  )
-    put(actionType, url, body, true);
 };
 
 // prefixed with underscored because delete is a reserved word in javascript
@@ -183,10 +112,6 @@ const _delete = async (
     });
 
   if (response != ResponseStatus.Unauthorized) return response;
-
-  const result = await refreshToken();
-  if (result?.status?.code == ResponseStatus.Success)
-    put(actionType, url, true);
 };
 
 const authHeader = (isMultipartForm?: boolean) => {
@@ -212,6 +137,5 @@ export const fetchWrapper = {
   post,
   put,
   delete: _delete,
-  postWithAttachFile,
   download,
 };

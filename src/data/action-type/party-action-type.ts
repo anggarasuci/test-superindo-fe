@@ -1,8 +1,0 @@
-export const PartyActionType = {
-    GET_PARTIES: "GET_PARTIES",
-    GET_PARTY_BY_ID: "GET_PARTY_BY_ID",
-    SUBMIT_PARTY: "SUBMIT_PARTY",
-    UPDATE_PARTY: "UPDATE_PARTY",
-    REMOVE_PARTY: "REMOVE_PARTY",
-  };
-  

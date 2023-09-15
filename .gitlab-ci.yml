@@ -1,0 +1,17 @@
+stages:
+  - deploy
+cache:
+  paths:
+    - node_modules/
+deploy:
+  image: docker
+  services:
+    - "docker:dind"
+  stage: deploy
+  script:
+    - docker build -t app/nasdem .
+    - docker run -d -p 3030:3030 --rm --name nasdem app/nasdem
+  tags:
+    - docker
+  only:
+    - main

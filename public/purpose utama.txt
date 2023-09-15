@@ -1,0 +1,34 @@
+purpose utama
+- input per TPS
+- input per Kelurahan
+- input per Kecamatan
+- input per Kota/Kabupaten
+- input per Provinsi
+- jumlah kursi dpr
+- jumlah kursi dprd
+- tahun pemilu
+
+Dapil
+- dapil ini meliputi kab/kota + jumlah suara
+- jumlah kursi per kab/kota
+- daftar dewan terpilih di dapil tsb
+- caleg ngiket di dapil
+- pie chart (total suara partai)
+- bar chart, ketika di klik, jumlah suara partai tersebut per kota/kab di dapil tsb
+
+kabupaten/kota
+- memperlihatkan data caleg
+- data partai dominan di piechart
+
+Provinsi
+- ada piechart dengan data suara per partai
+- tidak perlu detail per dapil
+
+home
+- 
+
+
+detail caleg
+- data pribadi caleg
+- riwayat caleg
+- detail perolehan suara di tps/kelurahan/kecamatan/dapil

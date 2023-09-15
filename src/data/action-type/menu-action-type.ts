@@ -1,0 +1,8 @@
+export const MenuActionType = {
+    GET_MENUS: "GET_MENUS",
+    GET_MENU_BY_ID: "GET_MENU_BY_ID",
+    SUBMIT_MENU: "SUBMIT_MENU",
+    UPDATE_MENU: "UPDATE_MENU",
+    REMOVE_MENU: "REMOVE_MENU",
+};
+  
